@@ -1,3 +1,49 @@
+
+import importlib.util
+import os
+import sys
+from pathlib import Path
+
+
+def is_colab() -> bool:
+    return (
+        "COLAB_RELEASE_TAG" in os.environ
+        or "COLAB_GPU" in os.environ
+        or "google.colab" in sys.modules
+        or Path("/content").exists()
+    )
+
+
+def load_custom_linprog(custom_dir: Path) -> None:
+    import scipy.optimize
+
+    simplex_path = custom_dir / "_linprog_simplex.py"
+    spec_simplex = importlib.util.spec_from_file_location(
+        "scipy.optimize._linprog_simplex", simplex_path
+    )
+    mod_simplex = importlib.util.module_from_spec(spec_simplex)
+    sys.modules["scipy.optimize._linprog_simplex"] = mod_simplex
+    spec_simplex.loader.exec_module(mod_simplex)
+
+    linprog_path = custom_dir / "_linprog.py"
+    spec_linprog = importlib.util.spec_from_file_location(
+        "scipy.optimize._linprog", linprog_path
+    )
+    mod_linprog = importlib.util.module_from_spec(spec_linprog)
+    sys.modules["scipy.optimize._linprog"] = mod_linprog
+    spec_linprog.loader.exec_module(mod_linprog)
+
+    setattr(scipy.optimize, "_linprog_simplex", mod_simplex)
+    setattr(scipy.optimize, "_linprog", mod_linprog)
+    if hasattr(mod_linprog, "linprog"):
+        setattr(scipy.optimize, "linprog", mod_linprog.linprog)
+
+
+if is_colab():
+    custom_dir = Path(__file__).resolve().parent / "files_to_replace"
+    if custom_dir.exists():
+        load_custom_linprog(custom_dir)
+
 import os
 import argparse
 import numpy as np
