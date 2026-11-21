@@ -95,14 +95,14 @@ def SI_SeqFS_DA(Xs, Ys, Xt, Yt, k, Sigma_s, Sigma_t, zmin=-20, zmax=20, method='
     # 5. Gọi hàm gộp duy nhất thay vì 4 hàm riêng lẻ
     # import time
     # t1 = time.time()
-    finalinterval = parametric_old.parametric(
-        ns=ns, nt=nt, a=a, b=b, X=X, Sigma=Sigma, S_=S_, h_=h_, 
-        SELECTION_F=SELECTION_F, 
-        method=method_upper, 
-        k_type=k_type, 
-        criterion=criterion, 
-        z_min=zmin*sigma_, z_max=zmax*sigma_
-    )
+    # finalinterval = parametric_old.parametric(
+    #     ns=ns, nt=nt, a=a, b=b, X=X, Sigma=Sigma, S_=S_, h_=h_, 
+    #     SELECTION_F=SELECTION_F, 
+    #     method=method_upper, 
+    #     k_type=k_type, 
+    #     criterion=criterion, 
+    #     z_min=zmin*sigma_, z_max=zmax*sigma_
+    # )
     # print(finalinterval)
 
     # selective_p_value = compute_p_value(finalinterval, etaTY, etaT_Sigma_eta)
