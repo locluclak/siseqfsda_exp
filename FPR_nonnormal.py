@@ -110,14 +110,22 @@ def residual_variance(Y, X):
     coef = np.linalg.lstsq(X, Y, rcond=None)[0]
     resid = Y - X.dot(coef)
     return float(resid.T.dot(resid).item()) / (X.shape[0] - X.shape[1])
-
+def mean_variance(Y):
+    y = np.asarray(Y, dtype=float).reshape(-1)
+    n = y.shape[0]
+    if n <= 1:
+        raise ValueError("Cần ít nhất 2 mẫu để tính phương sai mẫu không chệch.")
+    diff = y - np.mean(y)
+    return float(np.dot(diff, diff)) / (n - 1)
 
 def build_sigma(Xs, Xt, Ys, Yt, variance_mode):
     ns, nt = Xs.shape[0], Xt.shape[0]
     if variance_mode == "known":
         return np.identity(ns), np.identity(nt)
-    v_s = residual_variance(Ys, Xs)
-    v_t = residual_variance(Yt, Xt)
+    # v_s = residual_variance(Ys, Xs)
+    # v_t = residual_variance(Yt, Xt)
+    v_s = mean_variance(Ys)
+    v_t = mean_variance(Yt)
     return v_s * np.identity(ns), v_t * np.identity(nt)
 
 
