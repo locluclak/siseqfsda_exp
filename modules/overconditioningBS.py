@@ -164,7 +164,7 @@ def interval_BIC(X, Y, Portho, K, a, b, Sigma, seed = 0):
 
             g1, g2, g3 = g1.item(), g2.item(), g3.item()
 
-            itv = intersection.solve_quadratic_inequality(g3, g2, g1, seed)
+            itv = intersection.solve_quadratic_inequality(g3, g2, g1)
 
             intervals = intersection.interval_intersection(intervals, itv)
     return intervals 
@@ -188,7 +188,7 @@ def interval_AdjustedR2(X, Y, Portho, K, a, b, Sigma, seed = 0):
 
             g1, g2, g3 = g1.item(), g2.item(), g3.item()
 
-            itv = intersection.solve_quadratic_inequality(g3, g2, g1, seed)
+            itv = intersection.solve_quadratic_inequality(g3, g2, g1)
 
             intervals = intersection.interval_intersection(intervals, itv)
     return intervals 
@@ -211,7 +211,7 @@ def interval_AIC_BS(X, Y, Portho, K, a, b, Sigma, seed = 0):
 
             g1, g2, g3 = g1.item(), g2.item(), g3.item()
 
-            itv = intersection.solve_quadratic_inequality(g3, g2, g1, seed)
+            itv = intersection.solve_quadratic_inequality(g3, g2, g1)
 
             intervals = intersection.interval_intersection(intervals, itv)
     return intervals 

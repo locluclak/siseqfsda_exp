@@ -12,7 +12,7 @@ def main():
 
     K = 2 # select k features
     # generate data
-    Xs, Xt, Ys, Yt, Sigma_s, Sigma_t = gendata.generate(ns, nt, p, true_beta_s, true_beta_t)
+    Xs, Xt, Ys, Yt, Sigma_s, Sigma_t = gendata.generate(ns, nt, p, true_beta_s, true_beta_t, fixed_seed=None)
 
     # apply DA-SeqFS to select features
     list_selected_features = DA_SeqFS.DA_SeqFS(Xs, Ys, Xt, Yt, Sigma_s, Sigma_t,K, method='forward')
@@ -25,4 +25,7 @@ def main():
         print(f'    p-value of feature {list_selected_features[j]}: {pvalue}')
 
 if __name__ == "__main__":
+    # import time
+    # start_time = time.time()
     main()
+    # print("Time: ", time.time() - start_time, "seconds")

@@ -28,8 +28,8 @@ def solve_quadratic_roots(a, b, c, current_z, z_max):
     eps = 1e-7
     roots = []
     
-    if abs(a) < 1e-10: # Tuyến tính: bz + c = 0
-        if abs(b) > 1e-10:
+    if abs(a) < 1e-8: # Tuyến tính: bz + c = 0
+        if abs(b) > 1e-8:
             roots.append(-c / b)
     else: # Bậc hai
         delta = b**2 - 4*a*c
@@ -42,6 +42,7 @@ def solve_quadratic_roots(a, b, c, current_z, z_max):
     return min(valid_roots) if valid_roots else None
 
 def parametric_simplex_quadratic(ns, nt, H, h, u, v, w, z_min, z_max):
+    # print("Starting parametric simplex with quadratic cost...")
     H = np.array(H, dtype=float)
     h = np.array(h, dtype=float)
     u, v, w = np.array(u), np.array(v), np.array(w)
@@ -179,7 +180,7 @@ def parametric(ns, nt, a, b, X, Sigma, S_, h_, SELECTION_F,
     TD = []
     z = z_min
     zmax = z_max
-
+    # print(f"method={method}, k_type={k_type}, criterion={criterion}")
     OMEGA = OptimalTransport.constructOMEGA(ns, nt)
     c_ = np.zeros((ns * nt, 1))
     for i in range(X.shape[1]):
@@ -192,7 +193,8 @@ def parametric(ns, nt, a, b, X, Sigma, S_, h_, SELECTION_F,
             Ydeltaz = a + b * z
             T = np.zeros(ns * nt)
 
-            x_B = np.linalg.inv(S_[:, B]).dot(h_)
+            # x_B = np.linalg.inv(S_[:, B]).dot(h_)
+            x_B = np.linalg.solve(S_[:, B], h_)
             T[B] = x_B.flatten()
             T =  T.reshape((ns, nt))
 
@@ -249,9 +251,10 @@ def parametric(ns, nt, a, b, X, Sigma, S_, h_, SELECTION_F,
                         Sigmatilde_deltaz, SELECTIONinloop, GAMMAdeltaz
                     )
             for left, right in intervalinloop:
-                if left <= z <= right:
+                if left <= z <= (right + 1e-10):
                     intervalinloop = [(left, right)]
                     break
+            # print(z, SELECTIONinloop)
             intervalinloop = intersection.interval_intersection(intervalinloop, itvDA)
             # print("Inloop itv:", intervalinloop)
             TD = intersection.interval_union(TD, intervalinloop)
