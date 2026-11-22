@@ -257,6 +257,7 @@ def parametric(ns, nt, a, b, X, Sigma, S_, h_, SELECTION_F,
             # print(z, SELECTIONinloop)
             intervalinloop = intersection.interval_intersection(intervalinloop, itvDA)
             # print("Inloop itv:", intervalinloop)
-            TD = intersection.interval_union(TD, intervalinloop)
+            if sorted(SELECTION_F) == sorted(SELECTIONinloop):
+                TD = intersection.interval_union(TD, intervalinloop)
             z = intervalinloop[-1][1] + 0.00001
     return TD
